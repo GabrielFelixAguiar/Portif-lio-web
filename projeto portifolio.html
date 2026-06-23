@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gabriel de Aguiar Felix | Desenvolvedor Full Stack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #050b14;
+    --bg-soft: #0a1422;
+    --bg-card: #0d1a2b;
+    --led: #5ec8ff;
+    --led-soft: #8fdcff;
+    --led-dim: #2a6fa0;
+    --text: #e8f2fb;
+    --muted: #8aa0bd;
+    --line: rgba(94, 200, 255, 0.16);
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  body::before{
+    content:"";
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 70%);
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap{ position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+
+  h1, h2, h3 { font-family: 'Sora', sans-serif; }
+
+  .eyebrow{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--led);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .dot{
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--led);
+    box-shadow: 0 0 6px 2px var(--led), 0 0 14px 4px rgba(94,200,255,0.5);
+    animation: blink 2.4s ease-in-out infinite;
+  }
+
+  @keyframes blink{
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+
+  /* NAV */
+  nav{
+    position: sticky; top: 0; z-index: 10;
+    backdrop-filter: blur(10px);
+    background: rgba(5, 11, 20, 0.75);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .wrap{
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 28px;
+  }
+  .logo{
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--led-soft);
+  }
+  .logo span{ color: var(--muted); }
+  .navlinks{ display: flex; gap: 28px; list-style: none; }
+  .navlinks a{
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+  .navlinks a:hover{ color: var(--led-soft); }
+
+  /* HERO */
+  header.hero{
+    min-height: 92vh;
+    display: flex; align-items: center;
+    padding: 80px 0 40px;
+  }
+  .hero-grid{
+    display: grid;
+    grid-template-columns: 1.3fr 0.8fr;
+    gap: 50px;
+    align-items: center;
+    width: 100%;
+  }
+  .hero h1{
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 700;
+    line-height: 1.12;
+    margin-bottom: 18px;
+  }
+  .hero h1 .accent{
+    color: var(--led);
+    text-shadow: 0 0 18px rgba(94,200,255,0.55);
+  }
+  .hero p.lead{
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 480px;
+    margin-bottom: 30px;
+  }
+  .status-pill{
+    display: inline-flex; align-items: center; gap: 9px;
+    border: 1px solid var(--line);
+    background: rgba(94,200,255,0.05);
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--led-soft);
+    margin-bottom: 28px;
+  }
+  .cta-row{ display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn{
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.92rem;
+    padding: 13px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-primary{
+    background: var(--led);
+    color: #03101c;
+    box-shadow: 0 0 0 0 rgba(94,200,255,0.5);
+  }
+  .btn-primary:hover{
+    box-shadow: 0 0 24px 2px rgba(94,200,255,0.5);
+    transform: translateY(-1px);
+  }
+  .btn-ghost{
+    border: 1px solid var(--line);
+    color: var(--text);
+  }
+  .btn-ghost:hover{ border-color: var(--led); color: var(--led-soft); }
+
+  /* HERO VISUAL : terminal-like card */
+  .term{
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 0 40px -10px rgba(94,200,255,0.25);
+  }
+  .term-bar{
+    display: flex; gap: 7px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(94,200,255,0.03);
+  }
+  .term-bar span{ width: 10px; height: 10px; border-radius: 50%; background: var(--bg-soft); border: 1px solid var(--line); }
+  .term-body{
+    padding: 22px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.84rem;
+    color: var(--muted);
+  }
+  .term-body .k{ color: var(--led-soft); }
+  .term-body .v{ color: var(--text); }
+  .term-body .line{ margin-bottom: 9px; }
+  .cursor{
+    display: inline-block; width: 7px; height: 14px;
+    background: var(--led); margin-left: 4px;
+    animation: blink 1s steps(1) infinite;
+    vertical-align: middle;
+  }
+
+  /* SECTIONS */
+  section{ padding: 100px 0; border-top: 1px solid var(--line); }
+  .section-head{ margin-bottom: 48px; max-width: 620px; }
+  .section-head h2{ font-size: clamp(1.7rem, 3vw, 2.3rem); font-weight: 700; }
+  .section-head p{ color: var(--muted); margin-top: 12px; }
+
+  /* SOBRE */
+  .about-grid{ display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 56px; align-items: start; }
+  .about-grid p{ color: var(--muted); margin-bottom: 16px; }
+  .about-grid strong{ color: var(--led-soft); font-weight: 600; }
+  .stat-list{ display: flex; flex-direction: column; gap: 22px; }
+  .stat{
+    border-left: 2px solid var(--led-dim);
+    padding-left: 16px;
+  }
+  .stat .num{ font-family: 'Sora', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--led-soft); }
+  .stat .label{ font-size: 0.85rem; color: var(--muted); }
+
+  /* SKILLS */
+  .skill-cols{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+  .skill-cat{
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 22px 20px;
+  }
+  .skill-cat h3{
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--led);
+    margin-bottom: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+  }
+  .skill-item{
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 0;
+    font-size: 0.92rem;
+    color: var(--text);
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  .skill-item:first-of-type{ border-top: none; }
+  .skill-item .led-dot{
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--led-dim);
+    box-shadow: 0 0 0 0 transparent;
+    flex-shrink: 0;
+  }
+  .skill-cat:hover .led-dot{
+    background: var(--led);
+    box-shadow: 0 0 6px 2px rgba(94,200,255,0.6);
+  }
+
+  /* PROJECTS */
+  .proj-grid{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+  .proj-card{
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 26px;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .proj-card:hover{ border-color: var(--led-dim); transform: translateY(-3px); }
+  .proj-card .tag{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--led-soft);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .proj-card h3{ font-size: 1.15rem; margin: 10px 0 10px; }
+  .proj-card p{ color: var(--muted); font-size: 0.92rem; margin-bottom: 16px; }
+  .stack-row{ display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip{
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    border-radius: 100px;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* EDUCATION */
+  .edu-card{
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 30px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
+  .edu-icon{
+    width: 46px; height: 46px;
+    border-radius: 10px;
+    background: rgba(94,200,255,0.08);
+    border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: var(--led);
+    font-size: 1.3rem;
+  }
+  .edu-card h3{ font-size: 1.1rem; margin-bottom: 4px; }
+  .edu-card .when{ font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--led-soft); margin-bottom: 10px; display:block; }
+  .edu-card p{ color: var(--muted); font-size: 0.92rem; }
+
+  /* CONTACT */
+  .contact-box{
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 56px;
+    text-align: center;
+    box-shadow: 0 0 60px -20px rgba(94,200,255,0.3);
+  }
+  .contact-box h2{ font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 14px; }
+  .contact-box p{ color: var(--muted); margin-bottom: 28px; }
+  .contact-links{ display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+  footer{
+    text-align: center;
+    padding: 30px 0;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-family: 'JetBrains Mono', monospace;
+    border-top: 1px solid var(--line);
+  }
+
+  @media (max-width: 880px){
+    .hero-grid, .about-grid{ grid-template-columns: 1fr; }
+    .skill-cols{ grid-template-columns: repeat(2, 1fr); }
+    .proj-grid{ grid-template-columns: 1fr; }
+    .navlinks{ display: none; }
+    .edu-card{ flex-direction: column; }
+    .contact-box{ padding: 36px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">gabriel<span>.</span>dev</div>
+    <ul class="navlinks">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projetos">Projetos</a></li>
+      <li><a href="#formacao">Formação</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow"><span class="dot"></span> disponível para novos projetos</div>
+      <h1>Gabriel de Aguiar Felix<br>Desenvolvedor <span class="accent">Full Stack</span></h1>
+      <div class="status-pill"><span class="dot"></span> em transição: suporte pleno → full stack dev</div>
+      <p class="lead">Construo aplicações web do banco de dados à interface — unindo lógica de backend sólida, dados bem estruturados e experiências de uso bem cuidadas.</p>
+      <div class="cta-row">
+        <a href="#projetos" class="btn btn-primary">Ver projetos</a>
+        <a href="#contato" class="btn btn-ghost">Entrar em contato</a>
+      </div>
+    </div>
+    <div class="term">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <div class="term-body">
+        <div class="line"><span class="k">const</span> <span class="v">dev</span> = {</div>
+        <div class="line" style="padding-left:16px"><span class="k">nome:</span> <span class="v">"Gabriel de Aguiar Felix",</span></div>
+        <div class="line" style="padding-left:16px"><span class="k">cargo:</span> <span class="v">"Suporte Pleno",</span></div>
+        <div class="line" style="padding-left:16px"><span class="k">objetivo:</span> <span class="v">"Full Stack Developer",</span></div>
+        <div class="line" style="padding-left:16px"><span class="k">stack:</span> <span class="v">["Python","Java","JS","TS"],</span></div>
+        <div class="line" style="padding-left:16px"><span class="k">aprendendo:</span> <span class="v">true</span></div>
+        <div class="line">}<span class="cursor"></span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="sobre">
+  <div class="wrap about-grid">
+    <div class="stat-list">
+      <div class="stat"><div class="num">12+</div><div class="label">Tecnologias no stack</div></div>
+      <div class="stat"><div class="num">04</div><div class="label">Projetos em destaque</div></div>
+      <div class="stat"><div class="num">100%</div><div class="label">Foco em evolução contínua</div></div>
+    </div>
+    <div>
+      <div class="eyebrow"><span class="dot"></span> sobre mim</div>
+      <p>Sou <strong>Gabriel de Aguiar Felix</strong>, desenvolvedor full stack em formação prática constante. Atualmente atuo como <strong>Suporte Pleno</strong>, função em que lido diretamente com sistemas, processos e resolução de problemas no dia a dia — uma base que me deu visão real de como o software se comporta em produção.</p>
+      <p>Fora da rotina de suporte, dedico boa parte do meu tempo a construir minhas próprias ferramentas e projetos, caminho que escolhi para me consolidar como desenvolvedor full stack. Tenho formação em <strong>Ciência da Computação</strong>, o que me deu base sólida em lógica, estruturas de dados e banco de dados — conhecimento que aplico tanto no trabalho quanto nos meus projetos pessoais.</p>
+      <p>Gosto de projetos que exigem pensar do banco de dados até a interface: organizar dados, desenhar uma API clara e entregar uma experiência de uso agradável no front-end.</p>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Stack &amp; habilidades</h2>
+      <p>Tecnologias que utilizo no dia a dia e nos meus projetos, organizadas por área.</p>
+    </div>
+    <div class="skill-cols">
+      <div class="skill-cat">
+        <h3>Backend</h3>
+        <div class="skill-item"><span class="led-dot"></span> Python</div>
+        <div class="skill-item"><span class="led-dot"></span> Java</div>
+        <div class="skill-item"><span class="led-dot"></span> Flask</div>
+        <div class="skill-item"><span class="led-dot"></span> APIs REST</div>
+      </div>
+      <div class="skill-cat">
+        <h3>Frontend</h3>
+        <div class="skill-item"><span class="led-dot"></span> JavaScript</div>
+        <div class="skill-item"><span class="led-dot"></span> TypeScript</div>
+        <div class="skill-item"><span class="led-dot"></span> HTML5</div>
+        <div class="skill-item"><span class="led-dot"></span> CSS3</div>
+      </div>
+      <div class="skill-cat">
+        <h3>Dados &amp; BI</h3>
+        <div class="skill-item"><span class="led-dot"></span> PostgreSQL</div>
+        <div class="skill-item"><span class="led-dot"></span> SQL</div>
+        <div class="skill-item"><span class="led-dot"></span> Power BI</div>
+      </div>
+      <div class="skill-cat">
+        <h3>Design</h3>
+        <div class="skill-item"><span class="led-dot"></span> Figma</div>
+        <div class="skill-item"><span class="led-dot"></span> UI/UX básico</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projetos">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Projetos</h2>
+      <p>Alguns projetos pessoais que venho construindo para aplicar e expandir minhas habilidades full stack.</p>
+    </div>
+    <div class="proj-grid">
+      <div class="proj-card">
+        <span class="tag">E-commerce</span>
+        <h3>Loja Funko Pop — Copa do Mundo</h3>
+        <p>Landing page completa de e-commerce com catálogo de produtos, ilustrações SVG customizadas dos colecionáveis, carrinho de compras animado, modais de detalhes do produto e sistema de login/cadastro.</p>
+        <div class="stack-row">
+          <span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JavaScript</span>
+        </div>
+      </div>
+      <div class="proj-card">
+        <span class="tag">Dashboard</span>
+        <h3>Painel Analítico estilo Power BI</h3>
+        <p>Dashboard interativo com cards de KPIs, gráficos SVG construídos do zero e visualizações por categoria, inspirado na linguagem visual do Power BI.</p>
+        <div class="stack-row">
+          <span class="chip">JavaScript</span><span class="chip">SVG</span><span class="chip">Power BI</span>
+        </div>
+      </div>
+      <div class="proj-card">
+        <span class="tag">Sistema Web</span>
+        <h3>Base de Conhecimento Interna</h3>
+        <p>Aplicação web para organização de documentação técnica, com categorias, subpastas, busca full-text, upload de imagens e alternância entre visualização em grade e lista.</p>
+        <div class="stack-row">
+          <span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">PostgreSQL</span>
+        </div>
+      </div>
+      <div class="proj-card">
+        <span class="tag">API</span>
+        <h3>API REST com Flask</h3>
+        <p>API REST construída em Python com Flask para gerenciamento de dados, incluindo autenticação de rotas e integração com banco de dados relacional.</p>
+        <div class="stack-row">
+          <span class="chip">Python</span><span class="chip">Flask</span><span class="chip">PostgreSQL</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="formacao">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Formação</h2>
+      <p>Base acadêmica que sustenta minha evolução como desenvolvedor.</p>
+    </div>
+    <div class="edu-card">
+      <div class="edu-icon">🎓</div>
+      <div>
+        <h3>Ciência da Computação</h3>
+        <span class="when">Graduação</span>
+        <p>Curso de graduação em Ciência da Computação, com projetos práticos realizados ao longo da formação envolvendo lógica de programação, estruturas de dados, banco de dados e desenvolvimento de software — base que aplico diretamente nos meus projetos full stack.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contato">
+  <div class="wrap">
+    <div class="contact-box">
+      <div class="eyebrow" style="justify-content:center"><span class="dot"></span> vamos conversar</div>
+      <h2>Aberto a novas oportunidades</h2>
+      <p>Se você tem um projeto, uma vaga ou só quer trocar uma ideia sobre desenvolvimento, será um prazer conversar.</p>
+      <div class="contact-links">
+        <a href="gabrielfelixdeaguiar@email.com" class="btn btn-primary">Enviar e-mail</a>
+        <a href="https://www.linkedin.com/in/gabriel-de-aguiar-felix-4b9407264/" class="btn btn-ghost" target="_blank">LinkedIn</a>
+        <a href="https://github.com/GabrielFelixAguiar" class="btn btn-ghost" target="_blank">GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 Gabriel de Aguiar Felix — feito com HTML, CSS e JavaScript.
+</footer>
+
+</body>
+</html>
